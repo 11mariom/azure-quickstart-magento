@@ -1,0 +1,31 @@
+---
+- name: Extract Magento
+  unarchive:
+    copy: yes
+    dest: /var/www/html/magento
+    src: magento-1.9.3.2.tar.gz
+
+- name: Add group "magento"
+  group:
+    name: magento
+
+- name: Create Magento database
+  mysql_db:
+    name: "{{ mage_db_name }}"
+    state: present
+
+- name: Create Magento database user
+  mysql_user:
+    name: "{{ mage_db_user }}"
+    password: "{{ mage_db_password }}"
+    priv: "{{ mage_db_name }}.*:ALL"
+    host: 'localhost'
+    state: present
+
+- name: Change ownership of Magento installation
+  file:
+    path: /var/www/html/magento/
+    owner: apache
+    group: apache
+    state: directory
+    recurse: yes

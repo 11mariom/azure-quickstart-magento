@@ -1,0 +1,8 @@
+- name: Magento
+  hosts: all
+  become: true
+  become_user: root
+  roles:
+    - {role: httpd}
+    - {role: mysql}
+    - {role: magento}
